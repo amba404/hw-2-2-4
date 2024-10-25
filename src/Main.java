@@ -38,11 +38,10 @@ public class Main {
             throw new WrongPasswordException("Длина пароля больше 20 символов");
         }
 
-        for (int i = 0; i < password.length(); i++) {
-            if (rightSymbols.indexOf(password.substring(i, i + 1)) < 0) {
-                throw new WrongPasswordException("Пароль содержит недопустимые символы");
-            }
+        if (hasWrongSymbols(password, rightSymbols)) {
+            throw new WrongPasswordException("Пароль содержит недопустимые символы");
         }
+
 
         if (!password.equals(confirmPassword)) {
             throw new WrongPasswordException("Пароль и его подтверждение не совпадают");
