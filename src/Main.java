@@ -1,7 +1,9 @@
+import org.jetbrains.annotations.NotNull;
+
 public class Main {
     public static void main(String[] args) {
         try {
-            checkLoginPassword("null_________________", "null", "null");
+            checkLoginPassword("null", "null", "null");
         } catch (WrongLoginException e) {
             System.out.println("Логин указан с ошибкой: " + e.getMessage());
         } catch (WrongPasswordException e) {
@@ -16,7 +18,7 @@ public class Main {
         rightSymbols.append(rightSymbols.toString().toLowerCase());
         rightSymbols.append("0123456789_");
 
-        if (login == null || login.isBlank()) {
+        if (isValEmpty(login)) {
             throw new WrongLoginException("Логин пустой");
         }
 
@@ -24,13 +26,11 @@ public class Main {
             throw new WrongLoginException("Длина логина больше 20 символов");
         }
 
-        for (int i = 0; i < login.length(); i++) {
-            if (rightSymbols.indexOf(login.substring(i, i + 1)) < 0) {
-                throw new WrongLoginException("Логин содержит недопустимые символы");
-            }
+        if (hasWrongSymbols(login, rightSymbols)) {
+            throw new WrongLoginException("Логин содержит недопустимые символы");
         }
 
-        if (password == null || password.isBlank()) {
+        if (isValEmpty(password)) {
             throw new WrongPasswordException("Пароль пустой");
         }
 
@@ -47,6 +47,18 @@ public class Main {
         if (!password.equals(confirmPassword)) {
             throw new WrongPasswordException("Пароль и его подтверждение не совпадают");
         }
+    }
 
+    private static boolean hasWrongSymbols(@NotNull String value, @NotNull StringBuilder rightSymbols) {
+        for (int i = 0; i < value.length(); i++) {
+            if (rightSymbols.indexOf(value.substring(i, i + 1)) < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isValEmpty(String value) {
+        return value == null || value.isBlank();
     }
 }
